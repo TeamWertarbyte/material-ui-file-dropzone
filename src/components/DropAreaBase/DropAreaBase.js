@@ -87,6 +87,7 @@ class DropAreaBase extends React.Component {
       children,
       classes,
       clickable,
+      component: Component,
       multiple,
       onAcceptedDragEnter,
       onClick,
@@ -95,7 +96,7 @@ class DropAreaBase extends React.Component {
     } = this.props
 
     return (
-      <div
+      <Component
         {...other}
         onDragEnter={this.handleDragEnter}
         onDrop={this.handleDrop}
@@ -112,9 +113,13 @@ class DropAreaBase extends React.Component {
           ref={this.fileInputRef}
           type='file'
         />}
-      </div>
+      </Component>
     )
   }
+}
+
+DropAreaBase.defaultProps = {
+  component: 'div'
 }
 
 export default withStyles(styles)(DropAreaBase)
