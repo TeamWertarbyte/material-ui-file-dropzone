@@ -1,11 +1,6 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core';
-
-const styles = {
-  input: {
-    display: 'none'
-  }
-}
+import PropTypes from 'prop-types'
+import { withStyles } from '@material-ui/core'
 
 function includesTypeOrName (accept, type, name) {
   // an accepted type can be audio/*, video/*, image/*, any MIME type string or a file extension
@@ -31,13 +26,28 @@ function includesTypeOrName (accept, type, name) {
   })
 }
 
+function cancelEvent (e) {
+  e.preventDefault()
+  e.stopPropagation()
+}
+
+const styles = {
+  input: {
+    display: 'none'
+  }
+}
+
 class DropAreaBase extends React.Component {
   fileInputRef = React.createRef()
 
   handleClick = (e) => {
-    this.fileInputRef.current.click()
-    if (this.props.onClick) {
-      this.props.onClick(e)
+    if (!this.props.disabled) {
+      if (this.props.clickable) {
+        this.fileInputRef.current.click()
+      }
+      if (this.props.onClick) {
+        this.props.onClick(e)
+      }
     }
   }
 
@@ -71,7 +81,7 @@ class DropAreaBase extends React.Component {
   }
 
   handleDragEnter = (e) => {
-    this.cancelEvent(e)    
+    cancelEvent(e)    
     if (this.isAcceptingTransfer(e.dataTransfer)) {
       e.dataTransfer.dropEffect = 'copy'
       if (this.props.onAcceptedDragEnter) {
@@ -83,7 +93,7 @@ class DropAreaBase extends React.Component {
   }
 
   handleDragOver = (e) => {
-    this.cancelEvent(e)
+    cancelEvent(e)
     if (this.isAcceptingTransfer(e.dataTransfer)) {
       e.dataTransfer.dropEffect = 'copy'
     } else {
@@ -92,7 +102,7 @@ class DropAreaBase extends React.Component {
   }
 
   handleDrop = (e) => {
-    this.cancelEvent(e)
+    cancelEvent(e)
     if (this.props.onDrop) {
       this.props.onDrop(e)
     }
@@ -106,11 +116,6 @@ class DropAreaBase extends React.Component {
     this.props.onSelectFiles(e.target.files)
   }
 
-  cancelEvent = (e) => {
-    e.preventDefault()
-    e.stopPropagation()
-  }
-
   render () {
     const {
       accept,
@@ -121,7 +126,6 @@ class DropAreaBase extends React.Component {
       disabled,
       multiple,
       onAcceptedDragEnter,
-      onClick,
       onSelectFiles,
       ...other
     } = this.props
@@ -133,8 +137,8 @@ class DropAreaBase extends React.Component {
         onDragEnter={this.handleDragEnter}
         onDrop={this.handleDrop}
         onDragOver={this.handleDragOver}
-        onDragEnd={this.cancelEvent}
-        onClick={!disabled && (clickable ? this.handleClick : onClick)}
+        onDragEnd={cancelEvent}
+        onClick={this.handleClick}
       >
         {children}
         {clickable && <input
@@ -148,6 +152,50 @@ class DropAreaBase extends React.Component {
       </Component>
     )
   }
+}
+
+DropAreaBase.propTypes = {
+  /**
+   * The accepted file types as a comma-separated list of MIME types or file extensions.
+   * If not set, any file type will be accepted.
+   */
+  accept: PropTypes.string,
+  /**
+   * Used to render content in the drop area.
+   */
+  children: PropTypes.node,
+  /**
+   * Override or extend the styles applied to the component.
+   */
+  classes: PropTypes.object.isRequired,
+  /**
+   * If `true`, the drop area can be clicked to open a file selection dialog.
+   */
+  clickable: PropTypes.bool,
+  /**
+   * The component used for the root node.
+   */
+  component: PropTypes.elementType,
+  /**
+   * If `true`, the drop area will be disabled.
+   */
+  disabled: PropTypes.bool,
+  /**
+   * If `true`, the drop area will accept multiple files.
+   */
+  multiple: PropTypes.bool,
+  /**
+   * Callback fired when a user drags one or more accepted files over the drop area.
+   */
+  onAcceptedDragEnter: PropTypes.func,
+  /**
+   * Callback fired when the user clicks on the drop area.
+   */
+  onClick: PropTypes.func,
+  /**
+   * Callback fired when the user selects or drops one or more accepted files.
+   */
+  onSelectFiles: PropTypes.func.isRequired
 }
 
 DropAreaBase.defaultProps = {
