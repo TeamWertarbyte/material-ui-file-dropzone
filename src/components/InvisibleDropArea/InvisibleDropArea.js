@@ -45,6 +45,7 @@ const styles = theme => ({
     width: 96,
     height: 96
   },
+  disabled: {},
   '@keyframes wui-invisibledroparea-pulse': {
     '0%': {
       boxShadow: `0 0 0 0 ${theme.palette.primary.main}`
@@ -93,7 +94,9 @@ class InvisibleDropArea extends React.Component {
     return (
       <DropAreaBase
         {...other}
-        className={classNames(classes.root, className)}
+        className={classNames(classes.root, className, {
+          [classes.disabled]: this.props.disabled
+        })}
         onAcceptedDragEnter={this.handleDragOver}
         onDragLeave={this.handleDragLeave}
         onSelectFiles={this.handleSelectFiles}

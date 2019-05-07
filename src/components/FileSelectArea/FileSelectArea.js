@@ -8,7 +8,10 @@ const styles = theme => ({
     border: `1px solid ${theme.palette.divider}`,
     borderRadius: theme.shape.borderRadius,
     '&:hover, &$dragOver': {
-      borderColor: theme.palette.primary.main
+      borderColor: theme.palette.primary.main,
+      '&$disabled': {
+        borderColor: theme.palette.divider,
+      }
     },
     transition: theme.transitions.create('border-color'),
     '& *': {
@@ -16,9 +19,17 @@ const styles = theme => ({
     }
   },
   clickable: {
-    cursor: 'pointer'
+    cursor: 'pointer',
+    '&$disabled': {
+      cursor: 'default'
+    }
   },
-  dragOver: {}
+  disabled: {},
+  dragOver: {
+    '&$disabled': {
+      cursor: 'no-drop !important'
+    }
+  }
 })
 
 class FileSelectArea extends React.Component {
@@ -44,7 +55,6 @@ class FileSelectArea extends React.Component {
       children,
       className,
       classes,
-      clickable,
       onSelectFiles,
       ...other
     } = this.props
@@ -55,9 +65,12 @@ class FileSelectArea extends React.Component {
 
     return (
       <DropAreaBase
-        clickable={clickable}
         {...other}
-        className={classNames(classes.root, className, { [classes.dragOver]: dragOver, [classes.clickable]: clickable })}
+        className={classNames(classes.root, className, {
+          [classes.dragOver]: dragOver,
+          [classes.clickable]: this.props.clickable,
+          [classes.disabled]: this.props.disabled
+        })}
         onAcceptedDragEnter={this.handleDragOver}
         onDragLeave={this.handleDragLeave}
         onSelectFiles={this.handleSelectFiles}

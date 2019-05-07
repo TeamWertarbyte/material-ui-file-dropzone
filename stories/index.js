@@ -26,6 +26,15 @@ storiesOf('InvisibleDropArea', module)
         Try dragging some images to this area.
       </InvisibleDropArea>
   ))
+  .add('disabled', () => (
+    <InvisibleDropArea
+      style={{ width: '100%', height: 'calc(100vh - 20px)' }}
+      onSelectFiles={action('onSelectFiles')}
+      disabled
+    >
+      Try dragging a file to this area.
+    </InvisibleDropArea>
+  ))
 
 storiesOf('FileSelectArea', module)
   .add('with icon and text', () => (
@@ -33,6 +42,16 @@ storiesOf('FileSelectArea', module)
       style={{ width: 300, height: 300, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}
       onSelectFiles={action('onSelectFiles')}
       multiple
+    >
+      <UploadIcon style={{ opacity: 0.3, width: 96, height: 96 }} />
+      <Typography align='center'>Click or drag file to this area to upload</Typography>
+    </FileSelectArea>
+  ))
+  .add('disabled', () => (
+    <FileSelectArea
+      style={{ width: 300, height: 300, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}
+      onSelectFiles={action('onSelectFiles')}
+      disabled
     >
       <UploadIcon style={{ opacity: 0.3, width: 96, height: 96 }} />
       <Typography align='center'>Click or drag file to this area to upload</Typography>

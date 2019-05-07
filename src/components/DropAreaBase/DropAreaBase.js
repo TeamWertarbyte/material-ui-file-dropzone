@@ -42,7 +42,7 @@ class DropAreaBase extends React.Component {
   }
 
   isAcceptingTransfer (dataTransfer) {
-    if (dataTransfer.items.length === 1 || this.props.multiple) {
+    if (!this.props.disabled && (dataTransfer.items.length === 1 || this.props.multiple)) {
       if (dataTransfer.items.length > dataTransfer.files.length) {
         // drag event (no files) or some elements are not files
         for (const item of dataTransfer.items) {
@@ -118,6 +118,7 @@ class DropAreaBase extends React.Component {
       classes,
       clickable,
       component: Component,
+      disabled,
       multiple,
       onAcceptedDragEnter,
       onClick,
@@ -133,7 +134,7 @@ class DropAreaBase extends React.Component {
         onDrop={this.handleDrop}
         onDragOver={this.handleDragOver}
         onDragEnd={this.cancelEvent}
-        onClick={clickable ? this.handleClick : onClick}
+        onClick={!disabled && (clickable ? this.handleClick : onClick)}
       >
         {children}
         {clickable && <input
