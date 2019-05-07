@@ -41,17 +41,53 @@ class DropAreaBase extends React.Component {
     }
   }
 
-  handleDragEnter = (e) => {
-    this.cancelEvent(e)
-
-    if (this.props.onAcceptedDragEnter && (e.dataTransfer.items.length === 1 || this.props.multiple)) {
-      for (const item of e.dataTransfer.items) {
-        if (item.kind !== 'file' || !includesTypeOrName(this.props.accept, item.type)) {
-          return;
+  isAcceptingTransfer (dataTransfer) {
+    if (dataTransfer.items.length === 1 || this.props.multiple) {
+      if (dataTransfer.items.length > dataTransfer.files.length) {
+        // drag event (no files) or some elements are not files
+        for (const item of dataTransfer.items) {
+          if (item.kind !== 'file' || !includesTypeOrName(this.props.accept, item.type)) {
+            return false
+          }
+        }
+      } else {
+        // drop event
+        if (dataTransfer.files.length === 0) {
+          return false
+        }
+        for (const file of dataTransfer.files) {
+          if (!includesTypeOrName(this.props.accept, file.type, file.name)) {
+            return
+          }
         }
       }
+      return true
+    }
+    return false
+  }
 
-      this.props.onAcceptedDragEnter(e)
+  handleDragStart = (e) => {
+    e.dataTransfer.effectAllowed = 'copyMove'
+  }
+
+  handleDragEnter = (e) => {
+    this.cancelEvent(e)    
+    if (this.isAcceptingTransfer(e.dataTransfer)) {
+      e.dataTransfer.dropEffect = 'copy'
+      if (this.props.onAcceptedDragEnter) {
+        this.props.onAcceptedDragEnter(e)
+      }
+    } else {
+      e.dataTransfer.dropEffect = 'none'
+    }
+  }
+
+  handleDragOver = (e) => {
+    this.cancelEvent(e)
+    if (this.isAcceptingTransfer(e.dataTransfer)) {
+      e.dataTransfer.dropEffect = 'copy'
+    } else {
+      e.dataTransfer.dropEffect = 'none'
     }
   }
 
@@ -61,13 +97,7 @@ class DropAreaBase extends React.Component {
       this.props.onDrop(e)
     }
 
-    if (this.props.onAcceptedDragEnter && (e.dataTransfer.files.length === 1 || this.props.multiple)) {
-      for (const file of e.dataTransfer.files) {
-        if (!includesTypeOrName(this.props.accept, file.type, file.name)) {
-          return;
-        }
-      }
-
+    if (this.isAcceptingTransfer(e.dataTransfer)) {
       this.props.onSelectFiles(e.dataTransfer.files)
     }
   }
@@ -98,9 +128,10 @@ class DropAreaBase extends React.Component {
     return (
       <Component
         {...other}
+        onDragStart={this.handleDragStart}
         onDragEnter={this.handleDragEnter}
         onDrop={this.handleDrop}
-        onDragOver={this.cancelEvent}
+        onDragOver={this.handleDragOver}
         onDragEnd={this.cancelEvent}
         onClick={clickable ? this.handleClick : onClick}
       >
