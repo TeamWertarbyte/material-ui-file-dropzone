@@ -3,8 +3,7 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { Typography } from '@material-ui/core'
 import UploadIcon from '@material-ui/icons/CloudUpload'
-import InvisibleDropArea from '../src/components/InvisibleDropArea/InvisibleDropArea'
-import FileSelectArea from '../src/components/FileSelectArea/FileSelectArea';
+import { InvisibleDropArea, FileSelectArea } from '../src'
 
 storiesOf('InvisibleDropArea', module)
   .add('default', () => (

@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import Typography from '@material-ui/core/Typography'
 import ImageIcon from '@material-ui/icons/Image'
-import DropAreaBase from '../DropAreaBase/DropAreaBase'
+import DropAreaBase from '../DropAreaBase'
 
 const styles = theme => ({
   root: {

@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
-import DropAreaBase from '../DropAreaBase/DropAreaBase'
+import DropAreaBase from '../DropAreaBase'
 
 const styles = theme => ({
   root: {
