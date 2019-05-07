@@ -59,58 +59,51 @@ const styles = theme => ({
   }
 })
 
-class InvisibleDropArea extends React.Component {
-  state = {
-    dragOver: false
+const InvisibleDropArea = React.forwardRef(function InvisibleDropArea (props, ref) {
+  const {
+    activeText,
+    children,
+    className,
+    classes,
+    onSelectFiles,
+    ...other
+  } = props
+  
+  const [dragOver, setDragOver] = React.useState(false)
+
+  const handleDragOver = () => {
+    setDragOver(true)
   }
 
-  handleDragOver = (e) => {
-    this.setState({ dragOver: true })
+  const handleDragLeave = () => {
+    setDragOver(false)
   }
 
-  handleDragLeave = (e) => {
-    this.setState({ dragOver: false })
+  const handleSelectFiles = (files) => {
+    setDragOver(false)
+    onSelectFiles(files)
   }
 
-  handleSelectFiles = (files) => {
-    this.setState({ dragOver: false })
-    this.props.onSelectFiles(files)
-  }
-
-  render () {
-    const {
-      activeText,
-      children,
-      className,
-      classes,
-      onSelectFiles,
-      ...other
-    } = this.props
-
-    const {
-      dragOver
-    } = this.state
-
-    return (
-      <DropAreaBase
-        {...other}
-        className={classNames(classes.root, className, {
-          [classes.disabled]: this.props.disabled
-        })}
-        onAcceptedDragEnter={this.handleDragOver}
-        onDragLeave={this.handleDragLeave}
-        onSelectFiles={this.handleSelectFiles}
-      >
-        {children}
-        <div className={classNames(classes.overlay, { [classes.overlayDragging]: dragOver })}>
-          <div className={classes.iconContainer}>
-            <ImageIcon className={classes.icon} />
-          </div>
-          {activeText && <Typography>{activeText}</Typography>}
+  return (
+    <DropAreaBase
+      {...other}
+      className={classNames(classes.root, className, {
+        [classes.disabled]: props.disabled
+      })}
+      onAcceptedDragEnter={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onSelectFiles={handleSelectFiles}
+      ref={ref}
+    >
+      {children}
+      <div className={classNames(classes.overlay, { [classes.overlayDragging]: dragOver })}>
+        <div className={classes.iconContainer}>
+          <ImageIcon className={classes.icon} />
         </div>
-      </DropAreaBase>
-    )
-  }
-}
+        {activeText && <Typography>{activeText}</Typography>}
+      </div>
+    </DropAreaBase>
+  )
+})
 
 export default withStyles(styles)(InvisibleDropArea)

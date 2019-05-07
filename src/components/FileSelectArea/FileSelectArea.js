@@ -32,54 +32,47 @@ const styles = theme => ({
   }
 })
 
-class FileSelectArea extends React.Component {
-  state = {
-    dragOver: false
+const FileSelectArea = React.forwardRef(function FileSelectArea (props, ref) {
+  const {
+    children,
+    className,
+    classes,
+    onSelectFiles,
+    ...other
+  } = props
+  
+  const [dragOver, setDragOver] = React.useState(false)
+
+  const handleDragOver = () => {
+    setDragOver(true)
   }
 
-  handleDragOver = (e) => {
-    this.setState({ dragOver: true })
+  const handleDragLeave = () => {
+    setDragOver(false)
   }
 
-  handleDragLeave = (e) => {
-    this.setState({ dragOver: false })
+  const handleSelectFiles = (files) => {
+    setDragOver(false)
+    onSelectFiles(files)
   }
 
-  handleSelectFiles = (files) => {
-    this.setState({ dragOver: false })
-    this.props.onSelectFiles(files)
-  }
-
-  render () {
-    const {
-      children,
-      className,
-      classes,
-      onSelectFiles,
-      ...other
-    } = this.props
-
-    const {
-      dragOver
-    } = this.state
-
-    return (
-      <DropAreaBase
-        {...other}
-        className={classNames(classes.root, className, {
-          [classes.dragOver]: dragOver,
-          [classes.clickable]: this.props.clickable,
-          [classes.disabled]: this.props.disabled
-        })}
-        onAcceptedDragEnter={this.handleDragOver}
-        onDragLeave={this.handleDragLeave}
-        onSelectFiles={this.handleSelectFiles}
-      >
-        {children}
-      </DropAreaBase>
-    )
-  }
-}
+  return (
+    <DropAreaBase
+      {...other}
+      className={classNames(classes.root, className, {
+        [classes.dragOver]: dragOver,
+        [classes.clickable]: props.clickable,
+        [classes.disabled]: props.disabled
+      })}
+      onAcceptedDragEnter={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onSelectFiles={handleSelectFiles}
+      ref={ref}
+    >
+      {children}
+    </DropAreaBase>
+  )
+})
 
 FileSelectArea.defaultProps = {
   clickable: true
