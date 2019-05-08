@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import { fade } from '@material-ui/core/styles/colorManipulator'
@@ -107,5 +108,28 @@ const InvisibleDropArea = React.forwardRef(function InvisibleDropArea (props, re
     </DropAreaBase>
   )
 })
+
+InvisibleDropArea.propTypes = {
+  /**
+   * Icon to display when an accepted file is dragged over the area.
+   */
+  activeIcon: PropTypes.node,
+  /**
+   * Text to display when an accepted file is dragged over the area.
+   */
+  activeText: PropTypes.string,
+  /**
+   * Used to render content in the drop area.
+   */
+  children: PropTypes.node,
+  /**
+   * Override or extend the styles applied to the component.
+   */
+  classes: PropTypes.object.isRequired,
+  /**
+   * Callback fired when the user drops one or more accepted files.
+   */
+  onSelectFiles: PropTypes.func.isRequired
+}
 
 export default withStyles(styles)(InvisibleDropArea)

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import DropAreaBase from '../DropAreaBase'
@@ -73,6 +74,25 @@ const FileSelectArea = React.forwardRef(function FileSelectArea (props, ref) {
     </DropAreaBase>
   )
 })
+
+FileSelectArea.propTypes = {
+  /**
+   * Used to render content in the drop area.
+   */
+  children: PropTypes.node,
+  /**
+   * Override or extend the styles applied to the component.
+   */
+  classes: PropTypes.object.isRequired,
+  /**
+   * If `true`, the drop area can be clicked to open a file selection dialog.
+   */
+  clickable: PropTypes.bool,
+  /**
+   * Callback fired when the user selects or drops one or more accepted files.
+   */
+  onSelectFiles: PropTypes.func.isRequired
+}
 
 FileSelectArea.defaultProps = {
   clickable: true
