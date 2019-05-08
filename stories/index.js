@@ -1,7 +1,7 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { Typography } from '@material-ui/core'
+import Typography from '@material-ui/core/Typography'
 import UploadIcon from '@material-ui/icons/CloudUpload'
 import ImageIcon from '@material-ui/icons/Image'
 import { InvisibleDropArea, FileSelectArea } from '../src'

@@ -6,9 +6,11 @@
   "scripts": {
     "test": "standard",
     "lintfix": "standard --fix",
-    "build": "babel src -d lib",
-    "prepare": "babel src -d lib",
-    "storybook": "start-storybook -p 6006"
+    "build": "rm -rf lib && babel src -d lib",
+    "prepare": "rm -rf lib && babel src -d lib",
+    "storybook": "start-storybook -p 6006",
+    "storybook:build": "rm -rf storybook && build-storybook -o storybook",
+    "storybook:deploy": "npm run storybook:build && gh-pages -d storybook"
   },
   "repository": {
     "type": "git",
@@ -39,6 +41,7 @@
     "@storybook/addon-actions": "^5.0.11",
     "@storybook/react": "^5.0.11",
     "babel-eslint": "^7.2.3",
+    "gh-pages": "^2.0.1",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "standard": "^11.0.0"
