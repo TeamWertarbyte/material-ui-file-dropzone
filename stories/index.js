@@ -3,15 +3,18 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { Typography } from '@material-ui/core'
 import UploadIcon from '@material-ui/icons/CloudUpload'
+import ImageIcon from '@material-ui/icons/Image'
 import { InvisibleDropArea, FileSelectArea } from '../src'
 
 storiesOf('InvisibleDropArea', module)
   .add('default', () => (
     <InvisibleDropArea
       style={{ width: '100%', height: 'calc(100vh - 20px)' }}
+      activeIcon={<UploadIcon />}
+      activeText='Drop files to upload'
       onSelectFiles={action('onSelectFiles')}
     >
-      <Typography>Try dragging some images to this area.</Typography>
+      <Typography>Try dragging some files to this area.</Typography>
     </InvisibleDropArea>
   ))
   .add('multiple images', () => (
@@ -19,6 +22,7 @@ storiesOf('InvisibleDropArea', module)
       style={{ width: '100%', height: 'calc(100vh - 20px)' }}
       accept='image/*'
       multiple
+      activeIcon={<ImageIcon />}
       activeText='Drop image to upload'
       onSelectFiles={action('onSelectFiles')}
     >

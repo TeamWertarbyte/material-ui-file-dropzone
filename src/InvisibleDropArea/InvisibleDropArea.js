@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import Typography from '@material-ui/core/Typography'
-import ImageIcon from '@material-ui/icons/Image'
 import DropAreaBase from '../DropAreaBase'
 
 const styles = theme => ({
@@ -61,6 +60,7 @@ const styles = theme => ({
 
 const InvisibleDropArea = React.forwardRef(function InvisibleDropArea (props, ref) {
   const {
+    activeIcon,
     activeText,
     children,
     className,
@@ -97,9 +97,11 @@ const InvisibleDropArea = React.forwardRef(function InvisibleDropArea (props, re
     >
       {children}
       <div className={classNames(classes.overlay, { [classes.overlayDragging]: dragOver })}>
-        <div className={classes.iconContainer}>
-          <ImageIcon className={classes.icon} />
-        </div>
+        {activeIcon && (
+          <div className={classes.iconContainer}>
+            {React.cloneElement(activeIcon, { className: classes.icon })}
+          </div>
+        )}
         {activeText && <Typography>{activeText}</Typography>}
       </div>
     </DropAreaBase>
