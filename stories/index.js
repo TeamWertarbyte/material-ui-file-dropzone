@@ -11,7 +11,7 @@ storiesOf('InvisibleDropArea', module)
       style={{ width: '100%', height: 'calc(100vh - 20px)' }}
       onSelectFiles={action('onSelectFiles')}
     >
-      Try dragging a file to this area.
+      <Typography>Try dragging some images to this area.</Typography>
     </InvisibleDropArea>
   ))
   .add('multiple images', () => (
@@ -21,9 +21,9 @@ storiesOf('InvisibleDropArea', module)
       multiple
       activeText='Drop image to upload'
       onSelectFiles={action('onSelectFiles')}
-      >
-        Try dragging some images to this area.
-      </InvisibleDropArea>
+    >
+      <Typography>Try dragging some images to this area.</Typography>
+    </InvisibleDropArea>
   ))
   .add('disabled', () => (
     <InvisibleDropArea
@@ -31,7 +31,7 @@ storiesOf('InvisibleDropArea', module)
       onSelectFiles={action('onSelectFiles')}
       disabled
     >
-      Try dragging a file to this area.
+      <Typography>Try dragging a file to this area.</Typography>
     </InvisibleDropArea>
   ))
 
