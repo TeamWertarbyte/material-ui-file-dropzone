@@ -24,12 +24,12 @@ const styles = theme => ({
     justifyContent: 'center',
     opacity: 0,
     background: fade(theme.palette.background.default, 0.5),
-    transition: 'opacity .3s ease',
+    transition: 'opacity .3s ease'
   },
   overlayDragging: {
     opacity: 1,
     '& $iconContainer': {
-      animation: 'wui-invisibledroparea-pulse 1s infinite',
+      animation: 'wui-invisibledroparea-pulse 1s infinite'
     }
   },
   iconContainer: {
@@ -69,7 +69,7 @@ const InvisibleDropArea = React.forwardRef(function InvisibleDropArea (props, re
     onSelectFiles,
     ...other
   } = props
-  
+
   const [dragOver, setDragOver] = React.useState(false)
 
   const handleDragOver = () => {

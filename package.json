@@ -1,6 +1,6 @@
 {
   "name": "material-ui-file-dropzone",
-  "version": "3.1.1",
+  "version": "0.0.0",
   "description": "Material style file upload",
   "main": "lib/index.js",
   "scripts": {
@@ -16,10 +16,11 @@
   },
   "keywords": [
     "react",
-    "material",
     "material-ui",
-    "rating",
-    "react-component"
+    "react-component",
+    "file",
+    "upload",
+    "dropzone"
   ],
   "author": "Wertarbyte <kontakt@wertarbyte.com> (https://wertarbyte.com)",
   "license": "MIT",

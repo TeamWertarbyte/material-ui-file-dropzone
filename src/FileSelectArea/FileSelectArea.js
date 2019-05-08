@@ -11,7 +11,7 @@ const styles = theme => ({
     '&:hover, &$dragOver': {
       borderColor: theme.palette.primary.main,
       '&$disabled': {
-        borderColor: theme.palette.divider,
+        borderColor: theme.palette.divider
       }
     },
     transition: theme.transitions.create('border-color'),
@@ -41,7 +41,7 @@ const FileSelectArea = React.forwardRef(function FileSelectArea (props, ref) {
     onSelectFiles,
     ...other
   } = props
-  
+
   const [dragOver, setDragOver] = React.useState(false)
 
   const handleDragOver = () => {

@@ -5,22 +5,16 @@ function includesTypeOrName (accept, type, name) {
   // an accepted type can be audio/*, video/*, image/*, any MIME type string or a file extension
   // see https://html.spec.whatwg.org/multipage/input.html#file-upload-state-(type=file)
 
-  if (!accept)
-    return true
+  if (!accept) { return true }
 
   const acceptedTypes = accept.split(',').map(t => t.trim())
-  if (acceptedTypes.length === 0)
-    return true
+  if (acceptedTypes.length === 0) { return true }
 
   return acceptedTypes.some((acceptedType) => {
-    if (acceptedType === 'audio/*' && type.indexOf('audio/') === 0)
-      return true
-    if (acceptedType === 'video/*' && type.indexOf('video/') === 0)
-      return true
-    if (acceptedType === 'image/*' && type.indexOf('image/') === 0)
-      return true
-    if (acceptedType.indexOf('.') === 0)
-      return name != null && name.indexOf(acceptedType) === name.length - acceptedType.length
+    if (acceptedType === 'audio/*' && type.indexOf('audio/') === 0) { return true }
+    if (acceptedType === 'video/*' && type.indexOf('video/') === 0) { return true }
+    if (acceptedType === 'image/*' && type.indexOf('image/') === 0) { return true }
+    if (acceptedType.indexOf('.') === 0) { return name != null && name.indexOf(acceptedType) === name.length - acceptedType.length }
     return type === acceptedType
   })
 }
@@ -74,7 +68,7 @@ export default class DropAreaBase extends React.Component {
   }
 
   handleDragEnter = (e) => {
-    cancelEvent(e)    
+    cancelEvent(e)
     if (this.isAcceptingTransfer(e.dataTransfer)) {
       e.dataTransfer.dropEffect = 'copy'
       if (this.props.onAcceptedDragEnter) {
