@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core'
 
 function includesTypeOrName (accept, type, name) {
   // an accepted type can be audio/*, video/*, image/*, any MIME type string or a file extension
@@ -31,13 +30,7 @@ function cancelEvent (e) {
   e.stopPropagation()
 }
 
-const styles = {
-  input: {
-    display: 'none'
-  }
-}
-
-class DropAreaBase extends React.Component {
+export default class DropAreaBase extends React.Component {
   fileInputRef = React.createRef()
 
   handleClick = (e) => {
@@ -120,7 +113,6 @@ class DropAreaBase extends React.Component {
     const {
       accept,
       children,
-      classes,
       clickable,
       component: Component,
       disabled,
@@ -143,10 +135,10 @@ class DropAreaBase extends React.Component {
         {children}
         {clickable && <input
           accept={accept}
-          className={classes.input}
           multiple={multiple}
           onChange={this.handleSelectFiles}
           ref={this.fileInputRef}
+          style={{ display: 'none' }}
           type='file'
         />}
       </Component>
@@ -164,10 +156,6 @@ DropAreaBase.propTypes = {
    * Used to render content in the drop area.
    */
   children: PropTypes.node,
-  /**
-   * Override or extend the styles applied to the component.
-   */
-  classes: PropTypes.object.isRequired,
   /**
    * If `true`, the drop area can be clicked to open a file selection dialog.
    */
@@ -201,5 +189,3 @@ DropAreaBase.propTypes = {
 DropAreaBase.defaultProps = {
   component: 'div'
 }
-
-export default withStyles(styles)(DropAreaBase)
