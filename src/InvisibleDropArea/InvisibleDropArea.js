@@ -46,7 +46,8 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 3,
     width: 96,
     height: 96,
-    padding: 16
+    padding: 16,
+    boxSizing: 'content-box'
   },
   icon: {
     color: theme.palette.getContrastText(theme.palette.primary.main),
