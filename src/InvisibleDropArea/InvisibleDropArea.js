@@ -10,6 +10,14 @@ const styles = theme => ({
   root: {
     position: 'relative'
   },
+  dragOver: {
+    '& *': {
+      pointerEvents: 'none'
+    },
+    '& $overlay': {
+      pointerEvents: 'default'
+    }
+  },
   overlay: {
     position: 'absolute',
     top: 0,
@@ -89,7 +97,8 @@ const InvisibleDropArea = React.forwardRef(function InvisibleDropArea (props, re
     <DropAreaBase
       {...other}
       className={classNames(classes.root, className, {
-        [classes.disabled]: props.disabled
+        [classes.disabled]: props.disabled,
+        [classes.dragOver]: dragOver
       })}
       onAcceptedDragEnter={handleDragOver}
       onDragLeave={handleDragLeave}
