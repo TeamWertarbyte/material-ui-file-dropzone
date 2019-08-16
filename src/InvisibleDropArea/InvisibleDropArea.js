@@ -85,8 +85,10 @@ const InvisibleDropArea = React.forwardRef(function InvisibleDropArea (props, re
     setDragOver(true)
   }
 
-  const handleDragLeave = () => {
-    setDragOver(false)
+  const handleDragLeave = (e) => {
+    if (e.target === e.currentTarget) {
+      setDragOver(false)
+    }
   }
 
   const handleSelectFiles = (files) => {
