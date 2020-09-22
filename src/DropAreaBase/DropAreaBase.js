@@ -95,7 +95,27 @@ export default class DropAreaBase extends React.Component {
     }
 
     if (this.isAcceptingTransfer(e.dataTransfer)) {
-      this.props.onSelectFiles(e.dataTransfer.files)
+      // Recursive function to walk into directories and extract file objects
+      const recurseItem = async (item, sub) => new Promise(async (resolve, reject) => {
+        // Resolve with a single item list
+        if (item.isFile) { resolve([await new Promise((resolve, reject) => item.file(resolve, reject))]) }
+
+        // Resolve with merging all sub entries
+        if (item.isDirectory) {
+          item.createReader().readEntries(async entries =>
+            Promise
+              .all(entries
+                .map(entry => recurseItem(entry, sub + item.name + '/')))
+              .then(files => files.flat())
+              .then(files => resolve(files))
+          , err => reject(err))
+        }
+      })
+
+      Promise
+        .all([...e.dataTransfer.items].map(item => recurseItem(item.webkitGetAsEntry(), '/')))
+        .then(files => files.flat())
+        .then(files => this.props.onSelectFiles(files))
     }
   }
 
