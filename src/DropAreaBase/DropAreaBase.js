@@ -95,27 +95,35 @@ export default class DropAreaBase extends React.Component {
     }
 
     if (this.isAcceptingTransfer(e.dataTransfer)) {
-      // Recursive function to walk into directories and extract file objects
-      const recurseItem = async (item, sub) => new Promise(async (resolve, reject) => {
-        // Resolve with a single item list
-        if (item.isFile) { resolve([await new Promise((resolve, reject) => item.file(resolve, reject))]) }
+      if (e.dataTransfer.items.length === 0 || e.dataTransfer.items[0].webkitGetAsEntry === undefined) {
+        // Browser does not support webkitGetAsEntry.
+        this.props.onSelectFiles(e.dataTransfer.files)
+      } else {
+        // Browser supports webkitGetAsEntry (needed when dirs are in dropped items)
 
-        // Resolve with merging all sub entries
-        if (item.isDirectory) {
-          item.createReader().readEntries(async entries =>
-            Promise
-              .all(entries
-                .map(entry => recurseItem(entry, sub + item.name + '/')))
-              .then(files => files.flat())
-              .then(files => resolve(files))
-          , err => reject(err))
-        }
-      })
+        // Recursive function to walk into directories and extract file objects
+        const recurseItem = (item, sub) => new Promise((resolve, reject) => {
+          // Resolve with a single item list
+          if (item.isFile) { item.file(file => resolve([file]), e => reject(e)) }
 
-      Promise
-        .all([...e.dataTransfer.items].map(item => recurseItem(item.webkitGetAsEntry(), '/')))
-        .then(files => files.flat())
-        .then(files => this.props.onSelectFiles(files))
+          // Resolve with merging all sub entry lists
+          if (item.isDirectory) {
+            item.createReader().readEntries(entries =>
+              Promise
+                .all(entries
+                  .map(entry => recurseItem(entry, sub + item.name + '/')))
+                .then(files => files.flat())
+                .then(files => resolve(files))
+            , err => reject(err))
+          }
+        })
+
+        Promise
+          .all([...e.dataTransfer.items].map(item =>
+            recurseItem(item.webkitGetAsEntry(), '/')))
+          .then(files => files.flat())
+          .then(files => this.props.onSelectFiles(files))
+      }
     }
   }
 
