@@ -27,8 +27,8 @@ function cancelEvent (e) {
 // Declare global DataTransferItem for standardjs lintfix
 /* global DataTransferItem */
 
-// Browser supports webkitGetAsEntry API. Used for dropping folders
-const webkitGetAsEntrySupported = 'webkitGetAsEntry' in DataTransferItem.prototype
+// Browser supports webkitGetAsEntry API needed for dropping folders
+const folderDropSupported = !!DataTransferItem.prototype.webkitGetAsEntry
 
 export default class DropAreaBase extends React.Component {
   fileInputRef = React.createRef()
@@ -101,7 +101,7 @@ export default class DropAreaBase extends React.Component {
     }
 
     if (this.isAcceptingTransfer(e.dataTransfer)) {
-      if (webkitGetAsEntrySupported === false) {
+      if (folderDropSupported === false) {
         this.props.onSelectFiles(e.dataTransfer.files)
       } else {
         // Recursive function to walk into directories and extract file objects
