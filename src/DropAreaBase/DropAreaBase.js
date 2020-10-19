@@ -24,6 +24,12 @@ function cancelEvent (e) {
   e.stopPropagation()
 }
 
+// Declare global DataTransferItem for standardjs lintfix
+/* global DataTransferItem */
+
+// Browser supports webkitGetAsEntry API needed for dropping folders
+const folderDropSupported = !!DataTransferItem.prototype.webkitGetAsEntry
+
 export default class DropAreaBase extends React.Component {
   fileInputRef = React.createRef()
 
@@ -95,7 +101,32 @@ export default class DropAreaBase extends React.Component {
     }
 
     if (this.isAcceptingTransfer(e.dataTransfer)) {
-      this.props.onSelectFiles(e.dataTransfer.files)
+      if (folderDropSupported === false) {
+        this.props.onSelectFiles(e.dataTransfer.files)
+      } else {
+        // Recursive function to walk into directories and extract file objects
+        const recurseItem = (item, sub) => new Promise((resolve, reject) => {
+          // Resolve with a single item list
+          if (item.isFile) { item.file(file => resolve([file]), e => reject(e)) }
+
+          // Resolve with merging all sub entry lists
+          if (item.isDirectory) {
+            item.createReader().readEntries(entries =>
+              Promise
+                .all(entries
+                  .map(entry => recurseItem(entry, sub + item.name + '/')))
+                .then(files => files.flat())
+                .then(files => resolve(files))
+            , err => reject(err))
+          }
+        })
+
+        Promise
+          .all([...e.dataTransfer.items].map(item =>
+            recurseItem(item.webkitGetAsEntry(), '/')))
+          .then(files => files.flat())
+          .then(files => this.props.onSelectFiles(files))
+      }
     }
   }
 
