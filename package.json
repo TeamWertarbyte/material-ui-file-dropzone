@@ -1,6 +1,6 @@
 {
   "name": "material-ui-file-dropzone",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "File selection components with drag'n'drop support for Material-UI",
   "main": "lib/index.js",
   "scripts": {
